@@ -34,7 +34,7 @@
         "buying stuff /shop",
         "selling items quickly /sellgui",
         "teleport player to you /tpahere (name)",
-        "accept teleport request /to accept",
+        "accept teleport request /toaccept",
         "send teleport request /tpa (name)",
         "go back to lobby /lobby or /hub",
         "set your home point /sethome name",
