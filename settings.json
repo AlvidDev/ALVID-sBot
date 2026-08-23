@@ -31,9 +31,19 @@
       "repeat": true,
       "repeat-delay": 120,
       "messages": [
-        "I'm not a bot trust me bro",
-        "Subscribe to ALVIDGD",
-        "hello im a TRANSGENDER"
+        "buying stuff /shop",
+        "selling items quickly /sellgui",
+        "teleport player to you /tpahere (name)",
+        "accept teleport request /to accept",
+        "send teleport request /tpa (name)",
+        "go back to lobby /lobby or /hub",
+        "set your home point /sethome name",
+        "teleport to your home /home name",
+        "open auction house /ah",
+        "sell items on auction /ah sell price quantity",
+        "Join our server WhatsApp group: https://chat.whatsapp.com/IXIwCfH6v9MCmZuHK4Mb6S?s=cl&p=a&mlu=0&ilr=0",
+        "get your free media role just invite 15 people and get your free role",
+        "Subscribe to ALVIDGD"
       ]
     },
     "chat-log": true,
