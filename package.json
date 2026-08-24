@@ -1,7 +1,7 @@
 {
   "name": "ALVID'sBot",
   "version": "2.2",
-  "description": "Robust AFK bot for Minecraft servers with infinite uptime.",
+  "description": "ALVIDGD's AFK bot for Minecraft servers with infinite uptime.",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
