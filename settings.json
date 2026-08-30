@@ -1,100 +1,108 @@
-{
-  "name": "Habibggs",
-  "bot-account": {
-    "username": "habibggs",
-    "password": "",
-    "type": "offline"
-  },
-  "server": {
-    "ip": "VENOMSmpS1.aternos.me",
-    "port": 62064,
-    "version": "1.20.1",
-    "try-creative": false
-  },
-  "position": {
-    "enabled": true,
-    "x": 0,
-    "y": 100,
-    "z": 0
-  },
-  "utils": {
-    "auto-auth": {
-      "enabled": true,
-      "password": "nakarayjanab"
-    },
-    "anti-afk": {
-      "enabled": true,
-      "sneak": true
-    },
-    "chat-messages": {
-      "enabled": true,
-      "repeat": true,
-      "repeat-delay": 120,
-      "messages": [
-        "buying stuff /shop",
-        "selling items quickly /sellgui",
-        "Subscribe to ALVIDGD",
-        "teleport player to you /tpahere (name)",
-        "accept teleport request /toaccept",
-        "send teleport request /tpa (name)",
-        "Subscribe to ALVIDGD",
-        "go back to lobby /lobby or /hub",
-        "set your home point /sethome name",
-        "teleport to your home /home name",
-        "open auction house /ah",
-        "Subscribe to ALVIDGD",
-        "sell items on auction /ah sell price quantity",
-        "Join our server WhatsApp group: https://chat.whatsapp.com/IXIwCfH6v9MCmZuHK4Mb6S?s=cl&p=a&mlu=0&ilr=0",
-        "get your free media role just invite 15 people and get your free role",
-        "Subscribe to ALVIDGD"
-      ]
-    },
-    "chat-log": true,
-    "auto-reconnect": true,
-    "auto-reconnect-delay": 2000,
-    "max-reconnect-delay": 120000
-  },
-  "movement": {
-    "enabled": true,
-    "circle-walk": {
-      "enabled": true,
-      "radius": 4,
-      "speed": 3000
-    },
-    "look-around": {
-      "enabled": true,
-      "interval": 5000
-    },
-    "random-jump": {
-      "enabled": true,
-      "interval": 10000
-    }
-  },
-  "modules": {
-    "avoidMobs": true,
-    "combat": true,
-    "beds": false,
-    "chat": true,
-    "console-commands": true
-  },
-  "combat": {
-    "attack-mobs": true,
-    "auto-eat": true
-  },
-  "beds": {
-    "pick-up-day": false,
-    "place-night": false
-  },
-  "discord": {
-    "enabled": false,
-    "webhookUrl": "",
-    "events": {
-      "connect": true,
-      "disconnect": true,
-      "chat": false
-    }
-  },
-  "chat": {
-    "respond": true
+const mineflayer = require('mineflayer');
+const fs = require('fs');
+
+// Load settings from settings.json
+const settings = JSON.parse(fs.readFileSync('./settings.json', 'utf8'));
+
+// Initialize Bot
+const bot = mineflayer.createBot({
+  host: settings.server.ip,
+  port: settings.server.port,
+  username: settings['bot-account'].username,
+  password: settings['bot-account'].password || undefined,
+  auth: settings['bot-account'].type === 'offline' ? 'offline' : 'mojang',
+  version: settings.server.version || false
+});
+
+let messageIndex = 0;
+
+// Handle Bot Spawn / Login Events
+bot.on('spawn', () => {
+  console.log(`[BOT] ${bot.username} connected to ${settings.server.ip}:${settings.server.port}`);
+
+  // 1. Auto-Authentication (/login or /register)
+  if (settings.utils['auto-auth'].enabled) {
+    const pass = settings.utils['auto-auth'].password;
+    setTimeout(() => {
+      bot.chat(`/login ${pass}`);
+      bot.chat(`/register ${pass} ${pass}`);
+    }, 3000);
   }
-}
+
+  // 2. Anti-AFK Sneaking
+  if (settings.utils['anti-afk'].enabled && settings.utils['anti-afk'].sneak) {
+    bot.setControlState('sneak', true);
+  }
+
+  // 3. Periodic Broadcast Messages
+  if (settings.utils['chat-messages'].enabled) {
+    const messages = settings.utils['chat-messages'].messages;
+    const delay = (settings.utils['chat-messages']['repeat-delay'] || 120) * 1000;
+
+    setInterval(() => {
+      if (messages.length > 0) {
+        bot.chat(messages[messageIndex]);
+        messageIndex = (messageIndex + 1) % messages.length;
+      }
+    }, delay);
+  }
+
+  // 4. Random Jump Anti-AFK
+  if (settings.movement.enabled && settings.movement['random-jump'].enabled) {
+    setInterval(() => {
+      bot.setControlState('jump', true);
+      setTimeout(() => bot.setControlState('jump', false), 500);
+    }, settings.movement['random-jump'].interval || 10000);
+  }
+});
+
+// Interactive Chatbot Handler
+bot.on('chat', (username, message) => {
+  if (username === bot.username) return; // Ignore self
+
+  if (settings.utils['chat-log']) {
+    console.log(`[CHAT] <${username}> ${message}`);
+  }
+
+  if (!settings.chat.respond) return;
+
+  const msg = message.toLowerCase().trim();
+
+  // Command Responses
+  if (msg === '!help' || msg === '!cmds') {
+    bot.chat(`@${username} Commands: !shop, !tpa, !home, !ah, !discord, !rules`);
+  } 
+  else if (msg === '!shop') {
+    bot.chat(`@${username} Use /shop to buy items or /sellgui to sell quickly!`);
+  } 
+  else if (msg === '!tpa') {
+    bot.chat(`@${username} Teleport commands: /tpa (name), /tpahere (name), /tpaccept`);
+  } 
+  else if (msg === '!home') {
+    bot.chat(`@${username} Home commands: /sethome (name) and /home (name)`);
+  } 
+  else if (msg === '!ah') {
+    bot.chat(`@${username} Auction House: /ah | Sell item: /ah sell <price> <quantity>`);
+  } 
+  else if (msg === '!lobby' || msg === '!hub') {
+    bot.chat(`@${username} Return to lobby using /lobby or /hub`);
+  } 
+  else if (msg === '!media' || msg === '!role') {
+    bot.chat(`@${username} Invite 15 people to get your free Media Role!`);
+  } 
+  else if (msg.includes('whatsapp') || msg === '!whatsapp') {
+    bot.chat(`@${username} WhatsApp Link: ${settings.utils['chat-messages'].messages[13]}`);
+  }
+});
+
+// Auto Reconnect Handler
+bot.on('end', (reason) => {
+  console.log(`[BOT] Disconnected: ${reason}`);
+  if (settings.utils['auto-reconnect']) {
+    const delay = settings.utils['auto-reconnect-delay'] || 2000;
+    console.log(`[BOT] Reconnecting in ${delay / 1000} seconds...`);
+    setTimeout(() => process.exit(1), delay); // Railway restarts process on exit
+  }
+});
+
+bot.on('error', (err) => console.log('[ERROR]', err));
