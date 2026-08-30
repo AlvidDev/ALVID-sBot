@@ -1,4 +1,3 @@
-not working here is index.js
 "use strict";
 
 const { addLog, getLogs } = require("./logger");
