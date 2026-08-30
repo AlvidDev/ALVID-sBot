@@ -26,7 +26,7 @@
       "enabled": true,
       "sneak": true
     },
-    "chat-messages": {
+     "chat-messages": {
       "enabled": true,
       "repeat": true,
       "repeat-delay": 120,
@@ -35,7 +35,7 @@
         "selling items quickly /sellgui",
         "Subscribe to ALVIDGD",
         "teleport player to you /tpahere (name)",
-        "accept teleport request /tpaccept",
+        "accept teleport request /toaccept",
         "send teleport request /tpa (name)",
         "Subscribe to ALVIDGD",
         "go back to lobby /lobby or /hub",
@@ -95,24 +95,6 @@
     }
   },
   "chat": {
-    "respond": true,
-    "welcome-message": {
-      "enabled": true,
-      "message": "Welcome to VENOM SMP, {player}! Enjoy your stay bro!"
-    },
-    "triggers": [
-      {
-        "keywords": ["hello", "hi", "hey", "hy", "helo"],
-        "response": "hello brother"
-      },
-      {
-        "keywords": ["sub", "youtube", "channel"],
-        "response": "Subscribe to ALVIDGD on YouTube!"
-      },
-      {
-        "keywords": ["whatsapp", "group"],
-        "response": "Check chat broadcasts for our WhatsApp group link!"
-      }
-    ]
+    "respond": true
   }
 }
